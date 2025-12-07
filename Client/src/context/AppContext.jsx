@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dummyUserData, dummyChats } from "../assets/assets";
+import { getCurrentUser, getAccessToken, logoutUser as logoutFromAuth } from "../utils/authApi";
 
 const AppContext = createContext()
 
@@ -15,13 +15,40 @@ export const AppContextProvider = ({ children }) => {
 
     const fetchUser = async () => {
         setLoading(true)
-        // Simulate auth + data fetch
-        await new Promise(resolve => setTimeout(resolve, 500))
-        setUser(dummyUserData)
-        await fetchUsersChats()
+        const accessToken = getAccessToken()
+        
+        if (accessToken) {
+            try {
+                // Fetch user info from backend
+                const userData = await getCurrentUser(accessToken)
+                setUser(userData)
+                localStorage.setItem("user", JSON.stringify(userData))
+                await fetchUsersChats()
+            } catch (error) {
+                console.error("Failed to fetch user:", error)
+                logoutFromAuth()
+                setUser(null)
+                navigate("/login")
+            }
+        } else {
+            // No access token - user needs to login
+            setUser(null)
+        }
         setLoading(false)
     }
 
+    const loginUser = (userData) => {
+        // userData comes from backend, tokens are already stored by authApi
+        setUser(userData)
+        localStorage.setItem("user", JSON.stringify(userData))
+    }
+
+    const logoutUser = () => {
+        setUser(null)
+        setChats([])
+        logoutFromAuth()
+        navigate("/login")
+    }
 
     const fetchUsersChats = async () => {
         // Simulate network latency for chat data
@@ -48,8 +75,13 @@ export const AppContextProvider = ({ children }) => {
         }
     }, [user])
 
+    // Check for existing token on mount
+    useEffect(() => {
+        fetchUser()
+    }, [])
+
     const value = {
-        navigate, user, setUser, fetchUser, chats, setChats,
+        navigate, user, setUser, fetchUser, loginUser, logoutUser, chats, setChats,
         theme, setTheme, toggleTheme, fetchUsersChats, loading, setLoading
     }
 

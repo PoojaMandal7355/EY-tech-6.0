@@ -4,10 +4,15 @@ import { assets } from '../assets/assets'
 
 const Sidebar = ({ isMenuOpen = false, setIsMenuOpen }) => {
 
-  const { chats, theme, setTheme, user } = useAppContext()
+  const { chats, theme, setTheme, user, logoutUser } = useAppContext()
   const [search, setSearch] = useState("")
   const [isCollapsed, setIsCollapsed] = useState(false)
   const mobileTranslate = isMenuOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'
+
+  const handleLogout = () => {
+    logoutUser()
+    setIsMenuOpen?.(false)
+  }
 
   return (
     <div className={`flex flex-col h-screen shrink-0 p-5 bg-green-50 dark:bg-linear-to-b from-[#242124] to-[#000000] border-r-2 border-green-300 dark:border-[#80609F]/30 shadow-lg shadow-green-900/30 backdrop-blur-3xl transition-all duration-500 max-md:absolute md:relative left-0 z-10 dark:text-white transform md:transform-none md:translate-x-0 ${isCollapsed ? 'w-20 md:w-20' : 'w-72 md:w-80'} ${mobileTranslate}`}>
@@ -36,8 +41,8 @@ const Sidebar = ({ isMenuOpen = false, setIsMenuOpen }) => {
       {/* User Account */}
       {!isCollapsed && <div className='flex items-center gap-3 p-3 mt-3 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer group'>
         <img src={assets.user_icon} className='w-7 rounded-full shrink-0' alt="" />
-        <p className='flex-1 text-sm dark:text-primary truncate'>{user ? user.name : "Login your account"}</p>
-        {user && <img src={assets.logout_icon} className='h-5 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300' style={{filter: theme === 'dark' ? 'none' : 'invert(1)'}} alt="" />}
+        <p className='flex-1 text-sm dark:text-primary truncate'>{user ? user.full_name || user.email : "Login your account"}</p>
+        {user && <img onClick={handleLogout} src={assets.logout_icon} className='h-5 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300' style={{filter: theme === 'dark' ? 'none' : 'invert(1)'}} alt="" />}
         {setIsMenuOpen && (
           <div>
             <img onClick={() => setIsMenuOpen(false)} src={assets.close_icon} className='absolute top-3 right-3 w-5 h-5 cursor-pointer md:hidden not-dark:invert' alt="" />
