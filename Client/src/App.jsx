@@ -6,7 +6,6 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import ChatBox from './components/ChatBox'
 import { assets } from './assets/assets'
-import './assets/prism.css'
 import Loading from './pages/Loading'
 
 const App = () => {

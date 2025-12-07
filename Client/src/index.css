@@ -16,8 +16,36 @@
 }
 
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   display: none;
+} */
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Light mode scrollbar - green */
+::-webkit-scrollbar-thumb {
+  background: #22c55e;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #16a34a;
+}
+
+/* Dark mode scrollbar - white */
+.dark ::-webkit-scrollbar-thumb {
+  background: #fff;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #e0e0e0;
 }
 
 
@@ -30,4 +58,56 @@
 }
 .loader div:nth-child(3){
   animation-delay: 0.4s;
+}
+
+/* Chrome/Edge scrollbar styling for chat messages */
+.messages-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: #22c55e;
+  border-radius: 4px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: #16a34a;
+}
+
+.dark .messages-container::-webkit-scrollbar-thumb {
+  background: #fff;
+}
+
+.dark .messages-container::-webkit-scrollbar-thumb:hover {
+  background: #e0e0e0;
+}
+
+/* Textarea scrollbar */
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #22c55e;
+  border-radius: 3px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #16a34a;
+}
+
+.dark textarea::-webkit-scrollbar-thumb {
+  background: #fff;
+}
+
+.dark textarea::-webkit-scrollbar-thumb:hover {
+  background: #e0e0e0;
 }
