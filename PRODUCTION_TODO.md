@@ -3,6 +3,7 @@
 - [ ] Implement chat API endpoint `/api/v1/chat/generate` and wire `src/utils/responseGenerator.js` to it
 - [ ] Add HTTP client layer with auth header + 401 interceptor to auto-refresh token (using refresh token) and retry
 - [ ] Harden auth storage: prefer HttpOnly cookies (or keep localStorage with secure/HTTPS + CORS tightened)
+- [ ] Implement forgot-password flow on backend: `/api/v1/auth/forgot-password` (send email) and `/api/v1/auth/reset-password` (apply token+new password)
 - [ ] Surface API errors in UI for chat send, PDF upload, regenerate, and downloads (user-facing toasts/messages)
 - [ ] Connect PDF upload UI to backend `/api/v1/documents/upload` and fetch extracted text/metadata for context
 - [ ] Implement message history endpoints to persist/reload chat sessions; hook ChatBox to load history per session

@@ -61,6 +61,26 @@ export const loginUser = async (email, password) => {
 };
 
 /**
+ * Request a password reset link to be emailed to the user
+ * @param {string} email - User email
+ * @returns {Promise<{detail: string}>}
+ */
+export const requestPasswordReset = async (email) => {
+  const response = await fetch(`${API_URL}/auth/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || 'Could not send reset email');
+  }
+
+  return await response.json();
+};
+
+/**
  * Get current user information
  * @param {string} accessToken - JWT access token
  * @returns {Promise<{id, email, full_name, role, is_active, created_at, updated_at}>}

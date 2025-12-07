@@ -127,6 +127,41 @@ Refresh access token.
 }
 ```
 
+#### POST `/api/v1/auth/forgot-password`
+Request a password reset link to be emailed to the user.
+
+**Request**:
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response** (200 OK):
+```json
+{
+  "detail": "If this email is registered, a reset link has been sent"
+}
+```
+
+#### POST `/api/v1/auth/reset-password`
+Apply password reset using a token from the email link.
+
+**Request**:
+```json
+{
+  "token": "reset-token-from-email",
+  "new_password": "NewSecurePassword123"
+}
+```
+
+**Response** (200 OK):
+```json
+{
+  "detail": "Password updated successfully"
+}
+```
+
 **Response** (200 OK):
 ```json
 {
