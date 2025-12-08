@@ -1,0 +1,109 @@
+/* Global Cursor Effects */
+
+/* Custom Cursor Glow */
+* {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="7" fill="%238b5cf6" opacity="0.8"/><circle cx="14" cy="14" r="4" fill="%238b5cf6"/></svg>') 14 14, auto;
+}
+
+/* Dark mode cursor - Green */
+body.dark * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="7" fill="%2310b981" opacity="0.8"/><circle cx="14" cy="14" r="4" fill="%2310b981"/></svg>') 14 14, auto;
+}
+
+/* Pointer Cursor for Interactive Elements - Light Mode Purple */
+button, a, [role="button"], input[type="checkbox"], input[type="radio"], select {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="7" fill="%238b5cf6" opacity="0.9"/><circle cx="14" cy="14" r="4" fill="%238b5cf6"/><path d="M14 5v18M5 14h18" stroke="%238b5cf6" stroke-width="2" stroke-linecap="round"/></svg>') 14 14, pointer;
+}
+
+/* Pointer Cursor for Interactive Elements - Dark Mode Green */
+body.dark button, body.dark a, body.dark [role="button"], body.dark input[type="checkbox"], body.dark input[type="radio"], body.dark select {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="7" fill="%2310b981" opacity="0.9"/><circle cx="14" cy="14" r="4" fill="%2310b981"/><path d="M14 5v18M5 14h18" stroke="%2310b981" stroke-width="2" stroke-linecap="round"/></svg>') 14 14, pointer;
+}
+
+/* Text Selection Cursor - Light Mode Purple */
+input[type="text"], textarea, [contenteditable="true"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="5" fill="none" stroke="%238b5cf6" stroke-width="2"/><line x1="14" y1="7" x2="14" y2="21" stroke="%238b5cf6" stroke-width="2"/></svg>') 14 14, text;
+}
+
+/* Text Selection Cursor - Dark Mode Green */
+body.dark input[type="text"], body.dark textarea, body.dark [contenteditable="true"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="5" fill="none" stroke="%2310b981" stroke-width="2"/><line x1="14" y1="7" x2="14" y2="21" stroke="%2310b981" stroke-width="2"/></svg>') 14 14, text;
+}
+
+/* Glow Effect Container - Light Mode Purple */
+.cursor-glow {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid rgba(139, 92, 246, 0.9);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.7), inset 0 0 8px rgba(139, 92, 246, 0.5);
+  transition: width 0.15s ease-out, height 0.15s ease-out, border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.cursor-glow.active {
+  display: block;
+}
+
+.cursor-glow.hover {
+  width: 45px;
+  height: 45px;
+  border-color: rgba(139, 92, 246, 0.95);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.8), 0 0 40px rgba(139, 92, 246, 0.5), inset 0 0 12px rgba(139, 92, 246, 0.6);
+}
+
+/* Dark Mode Green */
+.cursor-glow.dark {
+  border-color: rgba(16, 185, 129, 0.9);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.7), inset 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+.cursor-glow.dark.hover {
+  border-color: rgba(16, 185, 129, 0.95);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.8), 0 0 40px rgba(16, 185, 129, 0.5), inset 0 0 12px rgba(16, 185, 129, 0.6);
+}
+
+/* Trail Effect - Light Mode Purple */
+.cursor-trail {
+  position: fixed;
+  width: 7px;
+  height: 7px;
+  background: rgba(139, 92, 246, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  animation: trail-fade 0.8s ease-out forwards;
+}
+
+/* Dark mode trail is green */
+body.dark .cursor-trail {
+  background: rgba(16, 185, 129, 0.5);
+}
+
+@keyframes trail-fade {
+  to {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+/* Interactive Element Highlight */
+button:hover, a:hover, [role="button"]:hover {
+  filter: brightness(1.1);
+}
+
+/* Dark Mode Cursor Adjustment */
+body.dark {
+  --cursor-color: 139, 92, 246;
+  --cursor-opacity: 0.5;
+}
+
+body:not(.dark) {
+  --cursor-color: 139, 92, 246;
+  --cursor-opacity: 0.6;
+}
