@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Sidebar from './components/Sidebar'
+import CursorGlow from './components/CursorGlow'
 import { useAppContext } from './context/AppContext'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
@@ -7,6 +8,7 @@ import Login from './pages/Login'
 import ChatBox from './components/ChatBox'
 import { assets } from './assets/assets'
 import Loading from './pages/Loading'
+import './styles/cursor.css'
 
 const App = () => {
 
@@ -22,6 +24,7 @@ const App = () => {
 
   return (
     <>
+      <CursorGlow />
       <Routes>
         <Route path="/" element={<Home />} />
 
