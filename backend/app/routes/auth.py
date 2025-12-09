@@ -1,6 +1,3 @@
-"""
-Authentication routes
-"""
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
@@ -18,7 +15,7 @@ from ..auth import (
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-# Request/Response models
+
 class RegisterRequest(BaseModel):
     email: EmailStr
     full_name: str
@@ -49,10 +46,9 @@ class UserResponse(BaseModel):
     created_at: str
     updated_at: str
 
+
 @router.post("/register", response_model=UserResponse)
 async def register(request: RegisterRequest, db: Session = Depends(get_db)):
-    """Register a new user"""
-    # Check if user already exists
     existing_user = db.query(User).filter(User.email == request.email).first()
     if existing_user:
         raise HTTPException(
@@ -60,14 +56,12 @@ async def register(request: RegisterRequest, db: Session = Depends(get_db)):
             detail="Email already registered"
         )
     
-    # Validate password length
     if len(request.password) < 8:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must be at least 8 characters"
         )
     
-    # Create new user
     hashed_password = hash_password(request.password)
     new_user = User(
         email=request.email,
@@ -82,9 +76,9 @@ async def register(request: RegisterRequest, db: Session = Depends(get_db)):
     
     return UserResponse(**new_user.to_dict())
 
+
 @router.post("/login", response_model=TokenResponse)
 async def login(request: LoginRequest, db: Session = Depends(get_db)):
-    """Login user and return JWT tokens"""
     user = authenticate_user(db, request.email, request.password)
     
     if not user:
@@ -110,11 +104,9 @@ async def get_me(current_user: User = Depends(get_current_user)):
 
 @router.post("/refresh", response_model=TokenResponse)
 async def refresh_token(request: RefreshRequest, db: Session = Depends(get_db)):
-    """Refresh access token using refresh token"""
     try:
         payload = verify_token(request.refresh_token)
         
-        # Check token type
         if payload.get("type") != "refresh":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -128,7 +120,6 @@ async def refresh_token(request: RefreshRequest, db: Session = Depends(get_db)):
                 detail="Invalid token"
             )
         
-        # Verify user still exists
         user = db.query(User).filter(User.id == int(user_id)).first()
         if not user:
             raise HTTPException(
@@ -136,7 +127,6 @@ async def refresh_token(request: RefreshRequest, db: Session = Depends(get_db)):
                 detail="User not found"
             )
         
-        # Create new tokens
         access_token = create_access_token(data={"sub": str(user.id)})
         new_refresh_token = create_refresh_token(data={"sub": str(user.id)})
         
@@ -153,14 +143,11 @@ async def refresh_token(request: RefreshRequest, db: Session = Depends(get_db)):
             detail="Token refresh failed"
         )
 
+
 @router.post("/forgot-password")
 async def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db)):
-    """Request password reset (mock implementation)"""
-    # Check if user exists
     user = db.query(User).filter(User.email == request.email).first()
     
-    # Always return success for security (don't reveal if email exists)
-    # In production, you would send an email here
     return {
         "detail": "If this email is registered, a password reset link has been sent."
     }
