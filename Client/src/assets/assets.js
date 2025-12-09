@@ -16,6 +16,13 @@ import download_icon from "./download_icon.svg";
 import plus_circle_icon from "./plus-circle-svgrepo-com.svg";
 import file_icon from "./file_icon.svg";
 import file_icon_dark from "./file_icon_dark.svg";
+import moon_clear from "./Moon clear.svg";
+import sun_icon from "./Sun.svg";
+import question_icon from "./Questin.svg";
+import ai_solid from "./Ai solid.svg";
+import processing_solid from "./Processing solid.svg";
+import dialogflow_insights from "./Dialogflow insights.svg";
+import download_arrow_down from "./Download arrow down.svg";
 
 export const assets = {
     logo,
@@ -36,4 +43,11 @@ export const assets = {
     plus_circle_icon,
     file_icon,
     file_icon_dark,
+    moon_clear,
+    sun_icon,
+    question_icon,
+    ai_solid,
+    processing_solid,
+    dialogflow_insights,
+    download_arrow_down,
 };

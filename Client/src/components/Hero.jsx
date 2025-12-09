@@ -6,7 +6,7 @@ const Hero = () => {
   const navigate = useNavigate()
 
   return (
-    <section className='w-full min-h-screen flex items-center justify-center bg-transparent border-b-2 border-emerald-300 dark:border-transparent shadow-[0_8px_12px_-2px_rgba(16,185,129,0.5)] dark:shadow-none'>
+    <section id='home' className='w-full min-h-screen flex items-center justify-center bg-transparent'>
       <div className='max-w-[95%] mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-8'>
         <div className='flex-1'>
           <h1 className='text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight drop-shadow-lg'>PharmaPilot — Agentic Research Navigator</h1>
@@ -18,7 +18,7 @@ const Hero = () => {
         </div>
 
         <div className='flex-1 flex items-center justify-center'>
-          <img src={assets.mountain_img} alt='hero' className='w-full rounded-lg shadow-2xl shadow-emerald-500/40 object-cover' />
+          <img src={assets.mountain_img} alt='hero' className='w-full rounded-lg shadow-2xl shadow-emerald-500/40 object-cover select-none pointer-events-none' draggable='false' />
         </div>
       </div>
     </section>
