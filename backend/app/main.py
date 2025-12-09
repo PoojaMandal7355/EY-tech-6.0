@@ -7,9 +7,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .database import Base, engine
 from .routes import auth, projects, agents
+import time
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+# Create database tables (with retry logic)
+def create_tables_with_retry():
+    max_retries = 5
+    for i in range(max_retries):
+        try:
+            Base.metadata.create_all(bind=engine)
+            print("✅ Database tables created successfully!")
+            break
+        except Exception as e:
+            if i < max_retries - 1:
+                print(f"⏳ Waiting for database to be ready... (attempt {i+1}/{max_retries})")
+                time.sleep(2)
+            else:
+                print(f"⚠️  Could not connect to database. Make sure PostgreSQL is running.")
+                print(f"   Run: docker-compose up -d")
+
+create_tables_with_retry()
 
 # Initialize FastAPI app
 app = FastAPI(
