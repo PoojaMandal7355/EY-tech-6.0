@@ -1,665 +1,300 @@
-# PharmaPilot Backend
+# 🚀 PharmaPilot Backend
 
-FastAPI backend for the PharmaPilot pharmaceutical research platform. Provides REST APIs for managing research projects, executing AI agents, and handling document uploads.
+**Simple, clean, production-ready FastAPI backend for pharmaceutical research.**
 
-## Features
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109-green.svg)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 
-- ✅ **Async FastAPI** - High-performance async web framework
-- ✅ **PostgreSQL** - Reliable relational database with SQLAlchemy 2.0
-- ✅ **Redis** - Caching and session management
-- ✅ **JWT Authentication** - Secure token-based auth with refresh tokens
-- ✅ **Role-Based Access Control** - User roles and authorization
-- ✅ **AI Agent Interface** - Support for 8 different AI agent types
-- ✅ **File Upload Handling** - Document management with size limits
-- ✅ **Auto API Docs** - Interactive API documentation at `/docs`
-- ✅ **CORS Enabled** - Frontend integration ready
-- ✅ **Docker Support** - Ready for containerization
+---
 
-## Project Structure
+## 📚 Complete Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[SETUP.md](SETUP.md)** | 🔧 Complete setup instructions with screenshots |
+| **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** | ⚡ Quick commands and API reference |
+| **[ARCHITECTURE.md](ARCHITECTURE.md)** | 🎨 Visual system architecture diagrams |
+| **[COMPARISON.md](COMPARISON.md)** | 📊 Why simple is better than complex |
+| **[SUMMARY.md](SUMMARY.md)** | 🎉 Complete summary and next steps |
+
+---
+
+## ⚡ Quick Start (60 seconds)
+
+```powershell
+# Navigate to backend folder
+cd backend
+
+# Run the quick start script
+.\start.ps1
+```
+
+That's it! Backend will start on **http://localhost:8000**
+
+---
+
+## ✅ What's Included
+
+### 🔐 Authentication System
+- ✅ User registration
+- ✅ JWT-based login
+- ✅ Token refresh
+- ✅ Password reset (mock)
+- ✅ Protected routes
+
+### 📊 Project Management
+- ✅ Create projects
+- ✅ List all projects
+- ✅ Update projects
+- ✅ Delete projects
+- ✅ User-specific data
+
+### 🤖 AI Agent Interface
+- ✅ Execute agents
+- ✅ Store results
+- ✅ View history
+- ✅ Project-based tracking
+
+### 🗄️ Database
+- ✅ PostgreSQL (Docker)
+- ✅ 3 tables (Users, Projects, AgentLogs)
+- ✅ Automatic migrations
+- ✅ Relationships configured
+
+---
+
+## 📊 Simple, clean FastAPI backend for PharmaPilot pharmaceutical research platform.
+
+## 📁 File Structure
 
 ```
 backend/
 ├── app/
-│   ├── main.py                 # FastAPI application factory
-│   ├── core/
-│   │   ├── config.py          # Settings management
-│   │   ├── database.py        # Database connection & sessions
-│   │   ├── security.py        # JWT & password hashing
-│   │   └── deps.py            # Dependency injection
-│   ├── models/
-│   │   ├── user.py            # User model
-│   │   ├── project.py         # Project & ResearchSession models
-│   │   ├── agent.py           # AgentRequest model & AgentType enum
-│   │   └── document.py        # Document model
-│   ├── schemas/
-│   │   ├── user.py            # User Pydantic schemas
-│   │   ├── project.py         # Project Pydantic schemas
-│   │   ├── agent.py           # Agent Pydantic schemas
-│   │   └── document.py        # Document Pydantic schemas
-│   ├── api/
-│   │   └── v1/
-│   │       ├── auth.py        # Auth endpoints
-│   │       ├── projects.py    # Project endpoints
-│   │       ├── agents.py      # Agent endpoints
-│   │       └── documents.py   # Document endpoints
-│   ├── services/
-│   │   ├── auth_service.py    # Auth business logic
-│   │   ├── project_service.py # Project business logic
-│   │   └── agent_service.py   # Agent business logic
-│   └── utils/
-│       └── file_handler.py    # File upload utilities
-├── tests/                      # Unit tests
-├── uploads/                    # Document storage
-├── requirements.txt           # Python dependencies
-├── docker-compose.yml         # Docker services (PostgreSQL, Redis)
-├── .env                       # Environment variables
-├── .gitignore                # Git ignore rules
-└── README.md                 # This file
+│   ├── main.py          # FastAPI app (entry point)
+│   ├── config.py        # Settings & configuration
+│   ├── database.py      # Database connection
+│   ├── models.py        # SQLAlchemy models (User, Project, AgentLog)
+│   ├── auth.py          # JWT authentication logic
+│   └── routes/
+│       ├── auth.py      # Auth endpoints (register, login, me)
+│       ├── projects.py  # Project CRUD endpoints
+│       └── agents.py    # AI agent interface
+├── requirements.txt     # Python dependencies
+├── docker-compose.yml   # PostgreSQL container
+├── .env                 # Environment variables
+└── README.md           # This file
 ```
 
-## Technology Stack
+## ⚡ Quick Start
 
-- **Framework**: FastAPI 0.104.1
-- **Server**: Uvicorn 0.24.0
-- **Database**: PostgreSQL 16 + SQLAlchemy 2.0 + asyncpg
-- **Cache**: Redis 7
-- **Authentication**: python-jose (JWT) + passlib (bcrypt)
-- **Validation**: Pydantic V2
-- **File Handling**: python-multipart + aiofiles
-
-## Prerequisites
-
-- Python 3.9+
-- Docker & Docker Compose
-- Git
-
-## Quick Start
-
-### 1. Setup Environment
+### 1. Install Dependencies
 
 ```bash
-# Clone repository
-cd PharmaPilot/backend
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# Windows
-venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
-
-# Install dependencies
+cd backend
 pip install -r requirements.txt
 ```
 
-### 2. Start Database & Cache
+### 2. Start Database
 
 ```bash
-# Start PostgreSQL and Redis containers
 docker-compose up -d
-
-# Verify containers are running
-docker-compose ps
-
-# Wait for healthchecks (approximately 10 seconds)
 ```
 
-### 3. Initialize Database
+### 3. Configure Environment
+
+Edit `.env` file if needed (defaults work for local development).
+
+### 4. Run Backend
 
 ```bash
-# Database tables will auto-initialize on app startup
-# No manual migration needed!
+# From backend directory
+uvicorn app.main:app --reload --port 8000
 ```
 
-### 4. Run the Backend
+Backend will be running at: **http://localhost:8000**
 
-```bash
-# Start development server (with hot reload)
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+API Documentation: **http://localhost:8000/docs**
 
-# Or use the main.py directly
-python app/main.py
-```
-
-Server will be available at `http://localhost:8000`
-
-### 5. Access API Documentation
-
-Open in your browser:
-- **Interactive Docs**: http://localhost:8000/docs
-- **Alternative Docs**: http://localhost:8000/redoc
-- **Health Check**: http://localhost:8000/health
-
-## API Endpoints
+## 🔗 API Endpoints
 
 ### Authentication (`/api/v1/auth`)
 
-```bash
-# Register user
-POST /api/v1/auth/register
-Content-Type: application/json
+- **POST** `/register` - Register new user
+  ```json
+  {
+    "email": "user@example.com",
+    "full_name": "John Doe",
+    "password": "password123",
+    "role": "researcher"
+  }
+  ```
 
-{
-  "email": "researcher@example.com",
-  "password": "SecurePassword123",
-  "full_name": "Dr. John Researcher",
-  "role": "researcher"
-}
+- **POST** `/login` - Login user
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "password123"
+  }
+  ```
+  Returns: `access_token`, `refresh_token`
 
-Response: { "id": 1, "email": "...", ... }
-
-
-# Login
-POST /api/v1/auth/login
-Content-Type: application/json
-
-{
-  "email": "researcher@example.com",
-  "password": "SecurePassword123"
-}
-
-Response: {
-  "access_token": "eyJhbGc...",
-  "refresh_token": "eyJhbGc...",
-  "token_type": "bearer"
-}
-
-
-# Get current user
-GET /api/v1/auth/me
-Authorization: Bearer {access_token}
-
-Response: { "id": 1, "email": "...", ... }
-
-
-# Refresh access token
-POST /api/v1/auth/refresh
-Content-Type: application/json
-
-{
-  "refresh_token": "eyJhbGc..."
-}
-
-Response: { "access_token": "...", ... }
-```
+- **GET** `/me` - Get current user info (requires auth)
+- **POST** `/refresh` - Refresh access token
+- **POST** `/forgot-password` - Request password reset
 
 ### Projects (`/api/v1/projects`)
 
-```bash
-# Create project
-POST /api/v1/projects
-Authorization: Bearer {access_token}
-Content-Type: application/json
+- **GET** `/projects` - List all projects (requires auth)
+- **POST** `/projects` - Create new project (requires auth)
+- **GET** `/projects/{id}` - Get project by ID (requires auth)
+- **PUT** `/projects/{id}` - Update project (requires auth)
+- **DELETE** `/projects/{id}` - Delete project (requires auth)
 
-{
-  "name": "Aspirin Research 2024",
-  "description": "Analysis of aspirin efficacy",
-  "molecule_name": "Acetylsalicylic acid",
-  "indication": "Pain and inflammation",
-  "status": "active"
-}
+### AI Agents (`/api/v1/agents`)
 
-Response: { "id": 1, "name": "...", ... }
+- **POST** `/agents/execute` - Execute AI agent (requires auth)
+- **GET** `/agents/logs` - Get agent logs (requires auth)
+- **GET** `/agents/logs/{id}` - Get specific log (requires auth)
 
+## 🔐 Authentication
 
-# Get all projects
-GET /api/v1/projects
-Authorization: Bearer {access_token}
+The API uses JWT (JSON Web Tokens) for authentication.
 
-Response: [ { "id": 1, "name": "...", ... } ]
+1. **Register** or **Login** to get tokens
+2. Store `access_token` in your frontend
+3. Include in requests: `Authorization: Bearer <access_token>`
+4. Use `refresh_token` to get new `access_token` when expired
 
+## 🗄️ Database Tables
 
-# Get specific project
-GET /api/v1/projects/{id}
-Authorization: Bearer {access_token}
+### Users
+- `id`, `email`, `full_name`, `password`, `role`, `is_active`
+- `created_at`, `updated_at`
 
-Response: { "id": 1, "name": "...", ... }
+### Projects
+- `id`, `user_id`, `name`, `molecule_name`, `description`, `status`
+- `created_at`, `updated_at`
 
+### Agent Logs
+- `id`, `project_id`, `agent_type`, `input_text`, `output_text`, `status`
+- `created_at`
 
-# Update project
-PUT /api/v1/projects/{id}
-Authorization: Bearer {access_token}
-Content-Type: application/json
+## 🛠️ Development
 
-{
-  "name": "Updated name",
-  "status": "completed"
-}
+### Check API Docs
+Visit http://localhost:8000/docs for interactive API documentation.
 
-Response: { "id": 1, "name": "Updated name", ... }
-
-
-# Delete project
-DELETE /api/v1/projects/{id}
-Authorization: Bearer {access_token}
-
-Response: 204 No Content
-
-
-# Create research session
-POST /api/v1/projects/{id}/sessions
-Authorization: Bearer {access_token}
-Content-Type: application/json
-
-{
-  "session_name": "Phase 1 Analysis"
-}
-
-Response: { "id": 1, "project_id": 1, "name": "Phase 1 Analysis", ... }
-```
-
-### Agents (`/api/v1/agents`)
+### Database Commands
 
 ```bash
-# Execute agent
-POST /api/v1/agents/{agent_type}/execute
-Authorization: Bearer {access_token}
-Content-Type: application/json
+# Start database
+docker-compose up -d
 
-{
-  "session_id": 1,
-  "input": {
-    "molecule": "Aspirin",
-    "target": "inflammation",
-    "parameters": { ... }
-  }
-}
+# Stop database
+docker-compose down
 
-Response: { "id": 1, "session_id": 1, "status": "pending", ... }
+# View logs
+docker-compose logs -f
 
-
-# Valid agent types:
-# - research
-# - market_intelligence
-# - formulation
-# - safety
-# - regulatory
-# - competitive_intelligence
-# - medical_writing
-# - patent_ip
-
-
-# Get agent request history
-GET /api/v1/agents/history?limit=50&offset=0
-Authorization: Bearer {access_token}
-
-Response: {
-  "total": 5,
-  "requests": [ { "id": 1, ... }, ... ]
-}
-
-
-# Get specific agent request
-GET /api/v1/agents/{request_id}
-Authorization: Bearer {access_token}
-
-Response: { "id": 1, "session_id": 1, ... }
+# Reset database (WARNING: deletes all data)
+docker-compose down -v
+docker-compose up -d
 ```
 
-### Documents (`/api/v1/documents`)
+### Test Endpoints
 
 ```bash
-# Upload document
-POST /api/v1/documents/upload?project_id=1
-Authorization: Bearer {access_token}
-Content-Type: multipart/form-data
+# Health check
+curl http://localhost:8000/health
 
-file: <binary_file>
-
-Response: {
-  "id": 1,
-  "message": "File uploaded successfully",
-  "file_name": "research.pdf",
-  "file_size": 2048576
-}
-
-
-# Get document details
-GET /api/v1/documents/{id}
-Authorization: Bearer {access_token}
-
-Response: {
-  "id": 1,
-  "project_id": 1,
-  "file_name": "research.pdf",
-  "file_type": "pdf",
-  ...
-}
-
-
-# Delete document
-DELETE /api/v1/documents/{id}
-Authorization: Bearer {access_token}
-
-Response: 204 No Content
-```
-
-## Environment Configuration
-
-The `.env` file contains all configuration:
-
-```env
-# App
-APP_NAME=PharmaPilot
-DEBUG=True
-ENVIRONMENT=development
-HOST=0.0.0.0
-PORT=8000
-
-# Database
-DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/pharmapilot
-DATABASE_SYNC_URL=postgresql://postgres:password@localhost:5432/pharmapilot
-
-# Redis
-REDIS_URL=redis://localhost:6379/0
-
-# Security
-SECRET_KEY=pharma-pilot-secret-key-change-in-production-32-chars-minimum
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-REFRESH_TOKEN_EXPIRE_DAYS=7
-
-# CORS (for frontend)
-CORS_ORIGINS=["http://localhost:3000","http://localhost:5173"]
-
-# File upload
-MAX_UPLOAD_SIZE=10485760  # 10MB
-UPLOAD_DIR=./uploads
-```
-
-### Production Settings
-
-Change these for production:
-1. **DEBUG**: Set to `False`
-2. **ENVIRONMENT**: Set to `production`
-3. **SECRET_KEY**: Use a strong, random 32+ character key
-4. **DATABASE_URL**: Use production PostgreSQL instance
-5. **REDIS_URL**: Use production Redis instance
-6. **CORS_ORIGINS**: Add your frontend domain
-
-## Testing
-
-### Manual Testing with cURL
-
-```bash
-# Register
-curl -X POST "http://localhost:8000/api/v1/auth/register" \
+# Register user
+curl -X POST http://localhost:8000/api/v1/auth/register \
   -H "Content-Type: application/json" \
-  -d '{
-    "email": "test@example.com",
-    "password": "TestPassword123",
-    "full_name": "Test User",
-    "role": "researcher"
-  }'
+  -d '{"email":"test@example.com","full_name":"Test User","password":"password123"}'
 
 # Login
-curl -X POST "http://localhost:8000/api/v1/auth/login" \
+curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{
-    "email": "test@example.com",
-    "password": "TestPassword123"
-  }'
-
-# Create project (replace TOKEN with actual access_token)
-curl -X POST "http://localhost:8000/api/v1/projects" \
-  -H "Authorization: Bearer TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Test Project",
-    "molecule_name": "TestMol",
-    "indication": "Testing"
-  }'
+  -d '{"email":"test@example.com","password":"password123"}'
 ```
 
-### Using FastAPI Interactive Docs
+## 🔄 Frontend Integration
 
-1. Go to http://localhost:8000/docs
-2. Click "Authorize" button (top right)
-3. Login to get token
-4. Click "Try it out" on any endpoint
-5. Fill in parameters and click "Execute"
-
-## Database Schema
-
-### Users Table
-- `id` - Primary key
-- `email` - Unique email address
-- `hashed_password` - Bcrypt hashed password
-- `full_name` - User's full name
-- `role` - User role (researcher, admin, etc.)
-- `is_active` - Account active status
-- `created_at`, `updated_at` - Timestamps
-
-### Projects Table
-- `id` - Primary key
-- `name`, `description` - Project info
-- `molecule_name`, `indication` - Research details
-- `status` - Project status (active, completed, etc.)
-- `owner_id` - FK to Users
-- `created_at`, `updated_at` - Timestamps
-
-### ResearchSessions Table
-- `id` - Primary key
-- `project_id` - FK to Projects
-- `name` - Session name
-- `created_at` - Timestamp
-
-### AgentRequests Table
-- `id` - Primary key
-- `session_id` - FK to ResearchSessions
-- `user_id` - FK to Users
-- `agent_type` - Agent type enum
-- `input_data`, `output_data` - JSON data
-- `status` - Request status (pending, completed, error)
-- `tokens_used` - Token count for AI usage
-- `created_at` - Timestamp
-
-### Documents Table
-- `id` - Primary key
-- `project_id` - FK to Projects
-- `file_name`, `file_path`, `file_type`, `file_size` - File info
-- `uploaded_by` - FK to Users
-- `created_at` - Timestamp
-
-## Integration with Frontend
-
-### Setup Frontend Connection
-
-```javascript
-// Frontend configuration (React/Vue/Angular)
-const API_BASE_URL = "http://localhost:8000";
-
-// Example: Login
-async function login(email, password) {
-  const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
-  });
-  
-  const data = await response.json();
-  localStorage.setItem("access_token", data.access_token);
-  localStorage.setItem("refresh_token", data.refresh_token);
-}
-
-// Example: Protected request
-async function getProjects() {
-  const token = localStorage.getItem("access_token");
-  const response = await fetch(`${API_BASE_URL}/api/v1/projects`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-  
-  return response.json();
-}
+Your React frontend is configured to connect to this backend at:
+```
+http://localhost:8000/api/v1
 ```
 
-## Common Issues & Solutions
+Make sure the backend is running before starting your frontend.
 
-### PostgreSQL Connection Error
-```
-sqlalchemy.exc.OperationalError: could not translate host name
-```
-**Solution**: Ensure PostgreSQL container is running
+## 📦 Tech Stack
+
+- **FastAPI** - Modern Python web framework
+- **PostgreSQL** - Database
+- **SQLAlchemy** - ORM
+- **JWT** - Authentication
+- **Uvicorn** - ASGI server
+- **Docker** - Database containerization
+
+## 🚨 Troubleshooting
+
+### Port 8000 already in use
 ```bash
-docker-compose up -d
-docker-compose logs postgres
+# Windows
+netstat -ano | findstr :8000
+taskkill /PID <PID> /F
+
+# Linux/Mac
+lsof -ti:8000 | xargs kill -9
 ```
 
-### Port Already in Use
-```
-OSError: [Errno 48] Address already in use
-```
-**Solution**: Change port in `.env` or kill process on port 8000
-
-### Module Not Found
-```
-ModuleNotFoundError: No module named 'fastapi'
-```
-**Solution**: Install dependencies
+### Database connection error
 ```bash
+# Check if PostgreSQL is running
+docker ps
+
+# Restart database
+docker-compose restart
+```
+
+### Module not found
+```bash
+# Reinstall dependencies
 pip install -r requirements.txt
 ```
 
-### Database Tables Not Created
-**Solution**: Restart the server - tables auto-create on startup
+## 🎯 Production Deployment
 
-## Stopping Services
+Before deploying to production:
 
-```bash
-# Stop FastAPI server
-# Press Ctrl+C in terminal
+1. Change `SECRET_KEY` in `.env` to a secure random string
+2. Update `CORS_ORIGINS` to include your frontend domain
+3. Use a managed PostgreSQL database (not Docker)
+4. Enable HTTPS
+5. Set up proper logging and monitoring
 
-# Stop Docker containers
-docker-compose down
+## 📝 Notes
 
-# Stop and remove volumes (WARNING: deletes data)
-docker-compose down -v
-```
+- Database tables are created automatically on startup
+- CORS is configured for `localhost:3000` and `localhost:5173` (Vite)
+- Password reset currently returns mock response (implement email in production)
+- All endpoints return JSON
+- Errors follow HTTP status code conventions
 
-## Production Deployment
+## 🤝 For AI Agent Developers
 
-### With Gunicorn
+To integrate your AI agents:
 
-```bash
-# Install gunicorn
-pip install gunicorn
+1. User creates a project via `/api/v1/projects`
+2. Your agent calls `/api/v1/agents/execute` with:
+   - `project_id`
+   - `agent_type` (e.g., "patent_search", "clinical_trial")
+   - `input_text` (user query)
+3. Store results in the response
+4. View execution history at `/api/v1/agents/logs`
 
-# Run with multiple workers
-gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
-```
+---
 
-### With Docker
-
-```bash
-# Build image
-docker build -t pharmapilot-backend .
-
-# Run container
-docker run -p 8000:8000 --env-file .env pharmapilot-backend
-```
-
-## Agent Integration
-
-The backend provides an interface for AI agents to integrate:
-
-1. **Agent executes request**:
-   ```
-   POST /api/v1/agents/{agent_type}/execute
-   ```
-
-2. **Backend stores request** in database with status "pending"
-
-3. **Agent polls or receives webhook** for request details
-
-4. **Agent processes** and calls update endpoint
-
-5. **Backend updates request** with results and status "completed"
-
-Example agent flow:
-```python
-# Agent code (running separately)
-import requests
-
-response = requests.post(
-    "http://localhost:8000/api/v1/agents/research/execute",
-    headers={"Authorization": f"Bearer {token}"},
-    json={
-        "session_id": 1,
-        "input": {"molecule": "Aspirin", "target": "inflammation"}
-    }
-)
-
-request_id = response.json()["id"]
-
-# Process research...
-results = process_research_query(...)
-
-# Update backend with results
-requests.put(
-    f"http://localhost:8000/api/v1/agents/{request_id}",
-    headers={"Authorization": f"Bearer {token}"},
-    json={"status": "completed", "output": results}
-)
-```
-
-## Logging & Debugging
-
-### Enable Detailed Logging
-
-```python
-# In app/main.py
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-```
-
-### View Database Logs
-
-```bash
-# See SQL queries
-docker-compose logs postgres
-
-# View all logs
-docker-compose logs
-```
-
-## Performance Tips
-
-1. **Use connection pooling** (already configured)
-2. **Enable Redis caching** for repeated queries
-3. **Index frequently queried fields** (already done for foreign keys)
-4. **Use pagination** for large datasets
-5. **Monitor with uvicorn logs**
-
-## Security Checklist
-
-- ✅ Passwords hashed with bcrypt
-- ✅ JWT tokens with expiration
-- ✅ CORS validation
-- ✅ SQL injection prevention (SQLAlchemy ORM)
-- ✅ File upload size limits
-- ✅ Role-based access control
-
-**Additional for production:**
-- Use HTTPS/SSL
-- Implement rate limiting
-- Add input sanitization
-- Use environment-specific secrets
-- Enable CSRF protection
-- Add request logging/monitoring
-
-## Support & Documentation
-
-- **FastAPI Docs**: https://fastapi.tiangolo.com
-- **SQLAlchemy Docs**: https://docs.sqlalchemy.org
-- **PostgreSQL Docs**: https://www.postgresql.org/docs
-- **Redis Docs**: https://redis.io/documentation
-
-## License
-
-© 2024 PharmaPilot. All rights reserved.
+Built with ❤️ for PharmaPilot

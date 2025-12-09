@@ -4,6 +4,9 @@ __pycache__/
 *$py.class
 *.so
 .Python
+env/
+venv/
+ENV/
 build/
 develop-eggs/
 dist/
@@ -20,11 +23,9 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
-venv/
-ENV/
-env/
-.venv
+# Environment
+.env
+.env.local
 
 # IDE
 .vscode/
@@ -32,31 +33,14 @@ env/
 *.swp
 *.swo
 *~
-.DS_Store
-
-# Environment
-.env
-.env.local
-.env.*.local
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Uploads
-uploads/*
-!uploads/.gitkeep
-
-# Tests
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Logs
-*.log
-logs/
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+*.log

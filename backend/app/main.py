@@ -1,82 +1,67 @@
-"""FastAPI main application factory"""
-from contextlib import asynccontextmanager
+"""
+PharmaPilot Backend - FastAPI Application
+Simple, clean backend for pharmaceutical research platform
+"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
-from app.core.database import init_db, close_db
-from app.api.v1 import auth, projects, agents, documents
+from .config import settings
+from .database import Base, engine
+from .routes import auth, projects, agents
+import time
 
+# Create database tables (with retry logic)
+def create_tables_with_retry():
+    max_retries = 5
+    for i in range(max_retries):
+        try:
+            Base.metadata.create_all(bind=engine)
+            print("✅ Database tables created successfully!")
+            break
+        except Exception as e:
+            if i < max_retries - 1:
+                print(f"⏳ Waiting for database to be ready... (attempt {i+1}/{max_retries})")
+                time.sleep(2)
+            else:
+                print(f"⚠️  Could not connect to database. Make sure PostgreSQL is running.")
+                print(f"   Run: docker-compose up -d")
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """
-    Manage FastAPI app lifecycle.
-    Handles startup and shutdown events.
-    """
-    # Startup
-    print(f"Starting {settings.app_name}...")
-    await init_db()
-    print("Database initialized")
-    
-    yield
-    
-    # Shutdown
-    print(f"Shutting down {settings.app_name}...")
-    await close_db()
-    print("Database closed")
+create_tables_with_retry()
 
+# Initialize FastAPI app
+app = FastAPI(
+    title="PharmaPilot API",
+    description="Backend API for PharmaPilot - Pharmaceutical Research Platform",
+    version="1.0.0"
+)
 
-def create_app() -> FastAPI:
-    """
-    Create and configure the FastAPI application.
-    
-    Returns:
-        Configured FastAPI application
-    """
-    app = FastAPI(
-        title=settings.app_name,
-        description="Backend API for pharmaceutical research platform",
-        version="0.1.0",
-        debug=settings.debug,
-        lifespan=lifespan,
-    )
-    
-    # Add CORS middleware
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.cors_origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-    
-    # Include API routers
-    app.include_router(auth.router)
-    app.include_router(projects.router)
-    app.include_router(agents.router)
-    app.include_router(documents.router)
-    
-    # Health check endpoint
-    @app.get("/health")
-    async def health_check():
-        """Health check endpoint"""
-        return {
-            "status": "healthy",
-            "app": settings.app_name,
-        }
-    
-    return app
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# Include routers
+app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
+app.include_router(projects.router, prefix=settings.API_V1_PREFIX)
+app.include_router(agents.router, prefix=settings.API_V1_PREFIX)
 
-app = create_app()
+@app.get("/")
+async def root():
+    """Root endpoint"""
+    return {
+        "message": "PharmaPilot API",
+        "version": "1.0.0",
+        "docs": "/docs"
+    }
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy"}
 
 if __name__ == "__main__":
     import uvicorn
-    
-    uvicorn.run(
-        "app.main:app",
-        host=settings.host,
-        port=settings.port,
-        reload=settings.debug,
-    )
+    uvicorn.run(app, host="0.0.0.0", port=8000)
