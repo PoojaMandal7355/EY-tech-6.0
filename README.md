@@ -49,11 +49,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Create environment file
-# Create a file named .env and add:
+# Create a file named .env in the Server/ directory and add:
 # DATABASE_URL=sqlite:///./pharmapilot.db
 # SECRET_KEY=your-secret-key-change-in-production
 # API_V1_PREFIX=/api/v1
 # CORS_ORIGINS=http://localhost:5173
+# FRONTEND_URL=http://localhost:5173
+# GMAIL_EMAIL=your-gmail@gmail.com
+# GMAIL_APP_PASSWORD=your-16-char-app-password
 
 # Start the backend server
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
@@ -73,8 +76,9 @@ cd Client
 npm install
 
 # Create environment file
-# Create a file named .env and add:
+# Create a file named .env in the Client/ directory and add:
 # VITE_API_URL=http://localhost:8000/api/v1
+# Note: .env is in .gitignore for security
 
 # Start the development server
 npm run dev
@@ -97,55 +101,89 @@ Open your browser and visit:
 PharmaPilot/
 ├── 📂 Server/                     # FastAPI Backend API
 │   ├── 📂 app/
-│   │   ├── main.py               # Application entry point
-│   │   ├── config.py             # Configuration settings
-│   │   ├── database.py           # Database connection
-│   │   ├── models.py             # SQLAlchemy models
-│   │   ├── auth.py               # JWT authentication
+│   │   ├── __init__.py           # Package initializer
+│   │   ├── main.py               # Application entry point & CORS setup
+│   │   ├── config.py             # Environment configuration (Pydantic settings)
+│   │   ├── database.py           # Database connection & session management
+│   │   ├── models.py             # SQLAlchemy ORM models (User, Project, etc.)
+│   │   ├── auth.py               # JWT token utilities & password hashing
+│   │   ├── email_service.py      # Gmail SMTP service for password resets
 │   │   └── 📂 routes/
-│   │       ├── auth.py           # Login/Register endpoints
+│   │       ├── __init__.py       # Routes package
+│   │       ├── auth.py           # Auth endpoints (login, register, forgot-password)
 │   │       ├── projects.py       # Project CRUD endpoints
-│   │       ├── agents.py         # AI agent endpoints
-│   │       └── chat.py           # Chat response endpoints
+│   │       └── chat.py           # Chat & AI response endpoints
 │   ├── requirements.txt          # Python dependencies
-│   ├── .env                      # Environment variables
-│   └── pharmapilot.db           # SQLite database
+│   ├── .env                      # Environment variables (SECRET_KEY, GMAIL_*, etc.)
+│   ├── .gitignore                # Git ignore rules
+│   └── pharmapilot.db           # SQLite database (auto-created)
 │
-├── 📂 Client/                     # React Frontend
+├── 📂 Client/                     # React + Vite Frontend
+│   ├── 📂 public/                # Static assets
 │   ├── 📂 src/
 │   │   ├── 📂 pages/
-│   │   │   ├── Login.jsx         # Authentication page
+│   │   │   ├── Login.jsx         # Login & Register page
+│   │   │   ├── ResetPassword.jsx # Password reset form
 │   │   │   ├── Home.jsx          # Main dashboard
 │   │   │   └── Loading.jsx       # Loading screen
 │   │   ├── 📂 components/
 │   │   │   ├── ChatBox.jsx       # Chat interface
 │   │   │   ├── Sidebar.jsx       # Navigation sidebar
+│   │   │   ├── Message.jsx       # Chat message component
+│   │   │   ├── NavBar.jsx        # Top navigation
+│   │   │   ├── Hero.jsx          # Landing hero section
+│   │   │   ├── StatsSection.jsx  # Statistics display
 │   │   │   └── ...               # Other UI components
 │   │   ├── 📂 context/
-│   │   │   └── AppContext.jsx    # Global state management
-│   │   └── 📂 utils/
-│   │       ├── authApi.js        # Authentication API client
-│   │       ├── projectsApi.js    # Projects API client
-│   │       ├── agentsApi.js      # Agents API client
-│   │       └── responseGenerator.js # Chat responses
+│   │   │   └── AppContext.jsx    # Global state (auth, projects, messages)
+│   │   ├── 📂 utils/
+│   │   │   ├── authApi.js        # Authentication API calls
+│   │   │   ├── projectsApi.js    # Projects API client
+│   │   │   ├── agentsApi.js      # Agents API client
+│   │   │   ├── fetchInterceptor.js # Axios interceptor for token refresh
+│   │   │   ├── responseGenerator.js # Mock/AI chat responses
+│   │   │   └── typingAnimation.js # Typing effect utility
+│   │   ├── 📂 styles/
+│   │   │   └── ...               # CSS modules
+│   │   ├── 📂 assets/
+│   │   │   └── assets.js         # Image/icon imports
+│   │   ├── App.jsx               # Root component & routing
+│   │   ├── main.jsx              # React entry point
+│   │   └── index.css             # Global styles (Tailwind)
 │   ├── package.json              # Node dependencies
-│   ├── .env                      # Frontend config
-│   └── vite.config.js            # Vite build config
+│   ├── package-lock.json         # Locked dependency versions
+│   ├── .env                      # Frontend config (VITE_API_URL)
+│   ├── .env.example              # Example environment file
+│   ├── .gitignore                # Git ignore (.env, node_modules, etc.)
+│   ├── vite.config.js            # Vite build configuration
+│   ├── eslint.config.js          # ESLint rules
+│   └── index.html                # HTML entry point
 │
-└── README.md                      # You are here!
+├── 📂 Data Files/                 # Mock/Research datasets
+│   ├── class_trends.json         # Drug class trends
+│   ├── clinical_trials_mock.json # Clinical trial data
+│   ├── competitor_landscape.json # Competitor analysis
+│   ├── exim_data.json            # Export/import statistics
+│   ├── market_overview.json      # Market intelligence
+│   ├── opportunity_score.json    # Opportunity scoring
+│   └── uspto_patents_detailed.json # USPTO patent data
+│
+└── README.md                      # Project documentation (you are here!)
 ```
 
 ## 💡 How to Use PharmaPilot
 
 ### 1. Create an Account
 - Open http://localhost:5173
-- Click "Sign Up"
+- Click "Sign Up" tab
 - Enter your details (email, name, password)
+- Password must be 8+ characters with uppercase, lowercase, and digit
 - Click "Register"
 
 ### 2. Login
 - Use your email and password
 - You'll be redirected to the main dashboard
+- If you forget your password, click "Forgot Password?" to receive a reset email
 
 ### 3. Ask Questions
 Type any pharmaceutical research question in the chat:
@@ -166,15 +204,16 @@ The system will provide:
 
 ### ✨ Authentication & Security (Production-Ready)
 - ✅ Secure user registration and login
-- 🔐 JWT token-based authentication
-- 🔄 Automatic token refresh
+- 🔐 JWT token-based authentication with refresh tokens
+- 🔄 Automatic token refresh via interceptor
 - 🛡️ Password hashing with bcrypt
 - 👤 User profile management
 - 🔒 **Account lockout** after 5 failed attempts
 - 📊 **Audit logging** for all auth events
-- 💪 **Strong password** enforcement
+- 💪 **Strong password** enforcement (8+ chars, upper/lower/digit)
 - 🕐 **Last login tracking**
-- 🔑 **Forgot password** workflow with secure tokens
+- 🔑 **Forgot password** workflow with secure email tokens (30-min expiry)
+- 📧 **Email service** via Gmail SMTP for password reset links
 
 ### 📋 Project Management
 - ➕ Create research projects
@@ -202,21 +241,30 @@ The system will provide:
 ### Backend
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| FastAPI | 0.100+ | Web framework |
+| FastAPI | 0.100+ | Web framework & API |
 | SQLAlchemy | 2.0 | ORM for database |
 | SQLite | 3 | Database (development) |
-| JWT | - | Authentication tokens |
+| Pydantic | 2.0+ | Data validation & settings |
+| JWT (PyJWT) | - | Authentication tokens |
 | Bcrypt | 4.1.2 | Password hashing |
 | Uvicorn | 0.23 | ASGI server |
+| Python-JOSE | - | JWT encoding/decoding |
+| Passlib | - | Password utilities |
+| Python-Multipart | - | Form data parsing |
+| Email-Validator | - | Email validation |
+| SMTP (Gmail) | - | Password reset emails |
 
 ### Frontend
 | Technology | Version | Purpose |
 |------------|---------|---------|
 | React | 19.2.0 | UI framework |
-| Vite | 7.2.6 | Build tool |
-| TailwindCSS | 4.1.17 | Styling |
-| React Router | 7.10.1 | Routing |
-| Axios | - | HTTP client |
+| Vite | 7.2.6 | Build tool & dev server |
+| TailwindCSS | 4.1.17 | Utility-first CSS |
+| React Router | 7.10.1 | Client-side routing |
+| Axios | 1.7+ | HTTP client & interceptors |
+| Context API | - | Global state management |
+| Framer Motion | - | Animations |
+| React Markdown | - | Markdown rendering |
 
 ## 📚 API Documentation
 
@@ -226,10 +274,12 @@ Once the backend is running, visit http://localhost:8000/docs for interactive AP
 
 #### Authentication
 ```
-POST /api/v1/auth/register    # Create new account
-POST /api/v1/auth/login       # Login to get tokens
-GET  /api/v1/auth/me          # Get current user info
-POST /api/v1/auth/refresh     # Refresh access token
+POST /api/v1/auth/register           # Create new account
+POST /api/v1/auth/login              # Login to get tokens
+GET  /api/v1/auth/me                 # Get current user info
+POST /api/v1/auth/refresh            # Refresh access token
+POST /api/v1/auth/forgot-password    # Request password reset email
+POST /api/v1/auth/reset-password     # Reset password with token
 ```
 
 #### Projects
@@ -268,7 +318,20 @@ REFRESH_TOKEN_EXPIRE_DAYS=7
 # API Settings
 API_V1_PREFIX=/api/v1
 CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+
+# Frontend URL (for password reset emails)
+FRONTEND_URL=http://localhost:5173
+
+# Email Service (Gmail SMTP for password resets)
+GMAIL_EMAIL=your-gmail@gmail.com
+GMAIL_APP_PASSWORD=your-16-char-app-password
 ```
+
+> **Note:** To get a Gmail App Password:
+> 1. Enable 2-factor authentication on your Google account
+> 2. Go to [Google App Passwords](https://myaccount.google.com/apppasswords)
+> 3. Generate a new app password for "Mail"
+> 4. Copy the 16-character password to `GMAIL_APP_PASSWORD`
 
 ### Frontend Environment Variables
 
@@ -333,7 +396,19 @@ npm install
 
 **Problem:** "Token expired" errors
 - ✅ This is normal after 30 minutes
-- ✅ Just login again to get new tokens
+- ✅ Tokens auto-refresh via interceptor; if that fails, login again
+
+**Problem:** Password reset email not received
+- ✅ Check spam/junk folder
+- ✅ Verify `GMAIL_EMAIL` and `GMAIL_APP_PASSWORD` in `Server/.env`
+- ✅ Ensure 2FA is enabled on Gmail account
+- ✅ Check backend logs for SMTP errors
+- ✅ Token expires in 30 minutes
+
+**Problem:** "Failed to send reset email"
+- ✅ Verify Gmail App Password is correct (16 chars, no spaces)
+- ✅ Test email service: `cd Server; python test_email_service.py`
+- ✅ Check if Gmail SMTP is blocked by firewall
 
 ### Database Issues
 
@@ -447,16 +522,44 @@ This project is developed for EY Technathon 6.0.
 - 🐛 Open an issue on GitHub
 - 📧 Contact the development team
 
-## 🎯 Project Status
+## 🎯 Project Status & Features
 
-✅ **Authentication** - **Production-ready** with account lockout, audit logging, strong passwords, forgot password workflow  
-✅ **Project Management** - Fully implemented  
-✅ **Chat Interface** - Working with mock data  
-✅ **AI Insights** - Mock responses active  
-⏳ **LangGraph Agents** - Ready for integration (see agents folder structure)  
-⏳ **Production Database** - SQLite (upgrade to PostgreSQL for production)  
+✅ **Authentication & Security** - **Production-ready**
+   - User registration & login with JWT tokens
+   - Token auto-refresh via Axios interceptor
+   - Forgot password workflow with email service
+   - Password reset tokens (30-min expiry)
+   - Account lockout after 5 failed attempts
+   - Audit logging for security events
+   - Strong password enforcement
+   - Last login tracking
 
-> 🔒 **Security Docs:** [`PRODUCTION_READY.md`](./PRODUCTION_READY.md) | [`AUTHENTICATION_SUMMARY.md`](./AUTHENTICATION_SUMMARY.md) | [`FORGOT_PASSWORD.md`](./FORGOT_PASSWORD.md)  
+✅ **Project Management** - Fully implemented
+   - Create, read, update, delete projects
+   - Project status tracking
+   - Molecule association
+   - User-specific project isolation
+
+✅ **Chat Interface** - Working with mock data
+   - Real-time conversational UI
+   - Context-aware responses
+   - Markdown rendering
+   - Copy & export capabilities
+
+✅ **Email Service** - Gmail SMTP integration
+   - Password reset emails
+   - Secure token generation
+   - HTML email templates
+
+✅ **Frontend Features**
+   - Responsive design with TailwindCSS
+   - Token refresh interceptor
+   - Global state management via Context API
+   - Protected routes & auth guards
+   - Loading states & error handling
+
+⏳ **AI Insights** - Mock responses active (ready for LangGraph integration)  
+⏳ **Production Database** - SQLite (upgrade to PostgreSQL recommended)  
 
 ---
 
