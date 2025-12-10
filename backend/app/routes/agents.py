@@ -1,6 +1,3 @@
-"""
-AI Agent interface routes
-"""
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -11,7 +8,7 @@ from ..auth import get_current_user
 
 router = APIRouter(prefix="/agents", tags=["AI Agents"])
 
-# Request/Response models
+
 class AgentExecuteRequest(BaseModel):
     project_id: int
     agent_type: str
@@ -35,14 +32,13 @@ class AgentLogResponse(BaseModel):
     status: str
     created_at: str
 
+
 @router.post("/execute", response_model=AgentExecuteResponse)
 async def execute_agent(
     request: AgentExecuteRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Execute an AI agent (interface for AI agent developers)"""
-    # Verify project belongs to user
     project = db.query(Project).filter(
         Project.id == request.project_id,
         Project.user_id == current_user.id
@@ -54,7 +50,6 @@ async def execute_agent(
             detail="Project not found"
         )
     
-    # Create agent log
     agent_log = AgentLog(
         project_id=request.project_id,
         agent_type=request.agent_type,
@@ -69,13 +64,13 @@ async def execute_agent(
     
     return AgentExecuteResponse(**agent_log.to_dict())
 
+
 @router.get("/logs", response_model=List[AgentLogResponse])
 async def get_agent_logs(
     project_id: Optional[int] = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Get agent execution logs"""
     query = db.query(AgentLog).join(Project).filter(Project.user_id == current_user.id)
     
     if project_id:
@@ -84,13 +79,13 @@ async def get_agent_logs(
     logs = query.order_by(AgentLog.created_at.desc()).all()
     return [AgentLogResponse(**log.to_dict()) for log in logs]
 
+
 @router.get("/logs/{log_id}", response_model=AgentLogResponse)
 async def get_agent_log(
     log_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Get a specific agent log"""
     log = db.query(AgentLog).join(Project).filter(
         AgentLog.id == log_id,
         Project.user_id == current_user.id

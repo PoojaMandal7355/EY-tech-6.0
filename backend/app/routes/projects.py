@@ -1,6 +1,3 @@
-"""
-Project management routes
-"""
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -11,7 +8,7 @@ from ..auth import get_current_user
 
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
-# Request/Response models
+
 class ProjectCreate(BaseModel):
     name: str
     molecule_name: Optional[str] = None
@@ -33,14 +30,15 @@ class ProjectResponse(BaseModel):
     created_at: str
     updated_at: str
 
+
 @router.get("", response_model=List[ProjectResponse])
 async def get_projects(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Get all projects for current user"""
     projects = db.query(Project).filter(Project.user_id == current_user.id).all()
     return [ProjectResponse(**project.to_dict()) for project in projects]
+
 
 @router.post("", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
 async def create_project(
@@ -48,7 +46,6 @@ async def create_project(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Create a new project"""
     new_project = Project(
         user_id=current_user.id,
         name=request.name,
@@ -63,13 +60,13 @@ async def create_project(
     
     return ProjectResponse(**new_project.to_dict())
 
+
 @router.get("/{project_id}", response_model=ProjectResponse)
 async def get_project(
     project_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Get a specific project"""
     project = db.query(Project).filter(
         Project.id == project_id,
         Project.user_id == current_user.id
@@ -83,6 +80,7 @@ async def get_project(
     
     return ProjectResponse(**project.to_dict())
 
+
 @router.put("/{project_id}", response_model=ProjectResponse)
 async def update_project(
     project_id: int,
@@ -90,7 +88,6 @@ async def update_project(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Update a project"""
     project = db.query(Project).filter(
         Project.id == project_id,
         Project.user_id == current_user.id
@@ -102,7 +99,6 @@ async def update_project(
             detail="Project not found"
         )
     
-    # Update fields
     if request.name is not None:
         project.name = request.name
     if request.molecule_name is not None:
@@ -117,13 +113,13 @@ async def update_project(
     
     return ProjectResponse(**project.to_dict())
 
+
 @router.delete("/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_project(
     project_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Delete a project"""
     project = db.query(Project).filter(
         Project.id == project_id,
         Project.user_id == current_user.id

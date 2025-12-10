@@ -1,10 +1,8 @@
-"""
-Database models for PharmaPilot
-"""
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from .database import Base
+
 
 class User(Base):
     __tablename__ = "users"
@@ -18,7 +16,6 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Relationships
     projects = relationship("Project", back_populates="user", cascade="all, delete-orphan")
     
     def to_dict(self):
@@ -45,7 +42,6 @@ class Project(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Relationships
     user = relationship("User", back_populates="projects")
     agent_logs = relationship("AgentLog", back_populates="project", cascade="all, delete-orphan")
     
@@ -73,7 +69,6 @@ class AgentLog(Base):
     status = Column(String(50), default="completed")
     created_at = Column(DateTime, default=datetime.utcnow)
     
-    # Relationships
     project = relationship("Project", back_populates="agent_logs")
     
     def to_dict(self):
