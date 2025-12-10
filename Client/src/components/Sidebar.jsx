@@ -43,11 +43,6 @@ const Sidebar = ({ isMenuOpen = false, setIsMenuOpen }) => {
         <img src={assets.user_icon} className='w-7 rounded-full shrink-0' alt="" />
         <p className='flex-1 text-sm dark:text-primary truncate'>{user ? user.full_name || user.email : "Login your account"}</p>
         {user && <img onClick={handleLogout} src={assets.logout_icon} className='h-5 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300' style={{filter: theme === 'dark' ? 'none' : 'invert(1)'}} alt="" />}
-        {setIsMenuOpen && (
-          <div>
-            <img onClick={() => setIsMenuOpen(false)} src={assets.close_icon} className='absolute top-3 right-3 w-5 h-5 cursor-pointer md:hidden not-dark:invert' alt="" />
-          </div>
-        )}
       </div>}
     </div>
   )

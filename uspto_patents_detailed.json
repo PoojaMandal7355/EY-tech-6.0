@@ -1,4 +1,4 @@
-{
+﻿{
   "metadata": {
     "dataset_name": "USPTO Mock - Detailed Patent Database",
     "version": "1.0",
@@ -78,7 +78,7 @@
       ],
       "freedom_to_operate_risk": "High",
       "remaining_exclusivity_years": 1,
-      "generic_entry_estimate_range": "2026–2028",
+      "generic_entry_estimate_range": "2026ΓÇô2028",
       "recommended_actions": [
         "Accelerate lifecycle patents (formulation, FDC patents)",
         "Prepare for generic launches and commercial switch strategies",
@@ -152,7 +152,7 @@
       ],
       "freedom_to_operate_risk": "High (biosimilar pressure)",
       "remaining_exclusivity_years": 3,
-      "generic_entry_estimate_range": "2028–2031 (biosimilar entry likely in key markets)",
+      "generic_entry_estimate_range": "2028ΓÇô2031 (biosimilar entry likely in key markets)",
       "recommended_actions": [
         "Strengthen method-of-use and combination patents",
         "Invest in manufacturing capacity to delay biosimilar price erosion",
@@ -223,7 +223,7 @@
       "litigation_flag": false,
       "freedom_to_operate_risk": "Medium",
       "remaining_exclusivity_years": 0,
-      "generic_entry_estimate_range": "2025–2027",
+      "generic_entry_estimate_range": "2025ΓÇô2027",
       "recommended_actions": [
         "Prioritize depot/delivery patents for lifecycle extension",
         "Consider LAI manufacturing partnerships to protect brand share"
@@ -272,7 +272,7 @@
 
     {
       "molecule": "Umeclidinium/Vilanterol",
-      "therapy_area": "Respiratory – COPD",
+      "therapy_area": "Respiratory ΓÇô COPD",
       "patent_family_id": "PF-COPD-550",
       "representative_patent": {
         "country": "US",
@@ -307,7 +307,7 @@
 
     {
       "molecule": "Losartan",
-      "therapy_area": "Cardiovascular – Hypertension",
+      "therapy_area": "Cardiovascular ΓÇô Hypertension",
       "patent_family_id": "PF-ARB-003",
       "representative_patent": {
         "country": "US",

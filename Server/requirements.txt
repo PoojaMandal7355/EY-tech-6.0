@@ -1,0 +1,32 @@
+# FastAPI Backend - PharmaPilot (Clean dependencies)
+# Core Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# Database
+sqlalchemy>=2.0.20
+
+# Authentication & Security
+python-jose[cryptography]>=3.3.0
+argon2-cffi>=23.1.0
+
+# Email & Validation
+email-validator>=2.1.0
+aiosmtplib>=3.0.0
+
+# Configuration & Utilities
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+python-multipart>=0.0.6
+
+# AI Agent Dependencies (LangGraph/LangChain)
+# TODO: Uncomment these when ready to integrate your LangGraph agents
+# langchain>=0.1.0
+# langchain-openai>=0.0.5
+# langchain-community>=0.0.20
+# langgraph>=0.0.20
+# openai>=1.10.0
+# tiktoken>=0.5.2
+# faiss-cpu>=1.7.4  # For vector storage (use faiss-gpu if GPU available)
+# chromadb>=0.4.22  # Alternative vector store

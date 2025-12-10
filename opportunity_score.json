@@ -1,4 +1,4 @@
-{
+﻿{
   "respiratory_asthma_india": {
     "therapy_area": "Respiratory - Asthma",
     "country": "India",
@@ -125,7 +125,7 @@
   },
 
   "autoimmune_dermatology_global": {
-    "therapy_area": "Autoimmune → Dermatology",
+    "therapy_area": "Autoimmune ΓåÆ Dermatology",
     "country": "Global",
     "opportunity_score": 7.8,
     "priority": "Medium-High",

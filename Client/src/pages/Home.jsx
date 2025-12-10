@@ -12,7 +12,7 @@ import Footer from '../components/Footer'
 
 const Home = () => {
   return (
-    <div className='flex flex-col bg-gradient-to-b from-[#d1fae5] via-[#a7f3d0] to-[#f0fdf4] dark:bg-gradient-to-b dark:from-[#242124] dark:to-[#000000]'>
+    <div className='flex flex-col bg-linear-to-b from-[#d1fae5] via-[#a7f3d0] to-[#f0fdf4] dark:bg-linear-to-b dark:from-[#242124] dark:to-[#000000]'>
       <NavBar />
       <Hero />
       <WorkflowAnimation />

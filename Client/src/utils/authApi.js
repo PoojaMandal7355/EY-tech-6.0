@@ -16,6 +16,7 @@ export const registerUser = async (email, fullName, password) => {
   const response = await fetch(`${API_URL}/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',  // Include cookies for CORS
     body: JSON.stringify({
       email,
       full_name: fullName,
@@ -25,8 +26,12 @@ export const registerUser = async (email, fullName, password) => {
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || 'Registration failed');
+    let detail = `HTTP ${response.status}`;
+    try {
+      const error = await response.json();
+      detail = error.detail || detail;
+    } catch {}
+    throw new Error(detail);
   }
 
   return await response.json();
@@ -52,10 +57,9 @@ export const loginUser = async (email, password) => {
 
   const data = await response.json();
   
-  // Store tokens in localStorage
+  // Store tokens in localStorage for prototype
   localStorage.setItem('access_token', data.access_token);
   localStorage.setItem('refresh_token', data.refresh_token);
-  localStorage.setItem('token_type', data.token_type);
   
   return data;
 };
@@ -66,36 +70,59 @@ export const loginUser = async (email, password) => {
  * @returns {Promise<{detail: string}>}
  */
 export const requestPasswordReset = async (email) => {
+  console.log('API_URL:', API_URL);
+  console.log('Requesting password reset for:', email);
+  
   const response = await fetch(`${API_URL}/auth/forgot-password`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify({ email })
   });
 
+  console.log('Response status:', response.status);
+  
   if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.detail || 'Could not send reset email');
+    let detail = `HTTP ${response.status}`;
+    try {
+      const error = await response.json();
+      detail = error.detail || detail;
+    } catch {}
+    console.error('Password reset failed:', detail);
+    throw new Error(detail);
   }
 
-  return await response.json();
+  const data = await response.json();
+  console.log('Password reset success:', data);
+  return data;
 };
 
 /**
  * Get current user information
- * @param {string} accessToken - JWT access token
  * @returns {Promise<{id, email, full_name, role, is_active, created_at, updated_at}>}
  */
-export const getCurrentUser = async (accessToken) => {
+export const getCurrentUser = async () => {
+  const token = localStorage.getItem('access_token');
+  
+  if (!token) {
+    throw new Error('No access token found');
+  }
+  
   const response = await fetch(`${API_URL}/auth/me`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
+      'Authorization': `Bearer ${token}`
     }
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch user info');
+    let detail = `HTTP ${response.status}`;
+    try {
+      const error = await response.json();
+      detail = error.detail || detail;
+    } catch {}
+    throw new Error(`Failed to fetch user info: ${detail}`);
   }
 
   return await response.json();
@@ -106,50 +133,66 @@ export const getCurrentUser = async (accessToken) => {
  * @param {string} refreshToken - JWT refresh token
  * @returns {Promise<{access_token, refresh_token, token_type}>}
  */
-export const refreshAccessToken = async (refreshToken) => {
+export const refreshAccessToken = async () => {
+  // No need to send refresh token - it's in httpOnly cookie
   const response = await fetch(`${API_URL}/auth/refresh`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ refresh_token: refreshToken })
+    credentials: 'include',  // Include cookies
+    body: JSON.stringify({})
   });
 
   if (!response.ok) {
     throw new Error('Token refresh failed');
   }
 
-  const data = await response.json();
-  
-  // Update tokens in localStorage
-  localStorage.setItem('access_token', data.access_token);
-  localStorage.setItem('refresh_token', data.refresh_token);
-  
-  return data;
+  // New tokens are in httpOnly cookies automatically
+  return await response.json();
 };
 
 /**
- * Logout user (clear tokens)
+ * Logout user by clearing localStorage
  */
-export const logoutUser = () => {
+export const logoutUser = async () => {
+  // Clear all auth data from localStorage
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
-  localStorage.removeItem('token_type');
   localStorage.removeItem('user');
+  
+  try {
+    await fetch(`${API_URL}/auth/logout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
 };
 
 /**
- * Get stored access token
- * @returns {string|null}
+ * Reset password using reset token from email
+ * @param {string} token - Password reset token from email link
+ * @param {string} newPassword - New password
+ * @returns {Promise<{detail: string}>}
  */
-export const getAccessToken = () => {
-  return localStorage.getItem('access_token');
-};
+export const resetPassword = async (token, newPassword) => {
+  const response = await fetch(`${API_URL}/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ token, new_password: newPassword })
+  });
 
-/**
- * Get stored refresh token
- * @returns {string|null}
- */
-export const getRefreshToken = () => {
-  return localStorage.getItem('refresh_token');
+  if (!response.ok) {
+    let detail = `HTTP ${response.status}`;
+    try {
+      const error = await response.json();
+      detail = error.detail || detail;
+    } catch {}
+    throw new Error(detail);
+  }
+
+  return await response.json();
 };
 
 /**
@@ -157,5 +200,6 @@ export const getRefreshToken = () => {
  * @returns {boolean}
  */
 export const isAuthenticated = () => {
-  return !!localStorage.getItem('access_token');
+  const token = localStorage.getItem('access_token');
+  return !!token;
 };

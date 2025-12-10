@@ -1,21 +1,19 @@
 import React, { useState } from 'react'
 import Sidebar from './components/Sidebar'
-import CursorGlow from './components/CursorGlow'
 import { useAppContext } from './context/AppContext'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import ResetPassword from './pages/ResetPassword'
 import ChatBox from './components/ChatBox'
 import { assets } from './assets/assets'
 import Loading from './pages/Loading'
-import './styles/cursor.css'
 
 const App = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const location = useLocation()
-  const { pathname } = location
-  const { user, loading } = useAppContext()
+  const { pathname } = useLocation()
+  const { user } = useAppContext()
 
   if (pathname === '/loading') return <Loading />
 
@@ -24,28 +22,28 @@ const App = () => {
 
   return (
     <>
-      <CursorGlow />
       <Routes>
         <Route path="/" element={<Home />} />
 
         <Route
           path="/login"
           element={
-            loading
-              ? <Loading />
-              : user
-                ? <Navigate to="/chat" replace />
-                : <div className='bg-linear-to-b from-[#242124] to-[#000000] flex items-center justify-center h-screen w-screen'><Login /></div>
+            user
+              ? <Navigate to="/chat" replace />
+              : <div className='bg-linear-to-b from-[#242124] to-[#000000] flex items-center justify-center h-screen w-screen'><Login /></div>
           }
+        />
+
+        <Route
+          path="/reset-password"
+          element={<ResetPassword />}
         />
 
         <Route
           path="/chat"
           element={
-            loading
-              ? <Loading />
-              : user
-                ? (
+            user
+              ? (
                   <div className='dark:bg-linear-to-b from-[#242124] to-[#000000] dark:text-white h-screen w-screen overflow-hidden'>
                     {shouldShowSidebar && !isMenuOpen && (
                       <img
@@ -65,14 +63,12 @@ const App = () => {
                     </div>
                   </div>
                 )
-                : <Navigate to="/login" replace />
+              : <Navigate to="/login" replace />
           }
         />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-
-
     </>
   )
 }

@@ -1,4 +1,4 @@
-{
+﻿{
   "diabetes_type2_secondline_usa": {
     "therapy_area": "Type 2 Diabetes - Second Line",
     "country": "USA",
@@ -34,7 +34,7 @@
   },
 
   "autoimmune_to_dermatology": {
-    "therapy_area": "Autoimmune → Dermatology",
+    "therapy_area": "Autoimmune ΓåÆ Dermatology",
     "country": "Global",
     "classes": [
       {

@@ -23,7 +23,7 @@ Enterprise-grade RESTful API for pharmaceutical research management, built with 
 ## Project Structure
 
 ```
-backend/
+Server/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py              # Application entry point

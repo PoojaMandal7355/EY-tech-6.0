@@ -1,4 +1,4 @@
-{
+﻿{
   "metadata": {
     "dataset_name": "Clinical Trials API Stub",
     "version": "1.0",
@@ -110,7 +110,7 @@
       },
       "collaborators": ["All India Institute of Medical Sciences"],
       "indication_specifics": {
-        "age_group": "12–17 years",
+        "age_group": "12ΓÇô17 years",
         "primary_endpoint": "FEV1 improvement at 12 weeks"
       },
       "competitive_density_score_10": 3,
@@ -219,7 +219,7 @@
       "collaborators": ["Unicef", "Kenya Medical Research Institute"],
       "indication_specifics": {
         "primary_endpoint": "Clinical cure rate",
-        "secondary": ["Shelf-stability in 40°C environments"]
+        "secondary": ["Shelf-stability in 40┬░C environments"]
       },
       "competitive_density_score_10": 3,
       "risk_of_late_stage_competitor": "Low",
