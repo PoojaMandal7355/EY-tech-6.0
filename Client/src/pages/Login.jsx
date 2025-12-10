@@ -82,7 +82,12 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] text-gray-500 rounded-lg shadow-xl border border-gray-200 bg-white">
+    <form 
+      onSubmit={handleSubmit} 
+      name={state === "login" ? "login-form" : state === "register" ? "signup-form" : "forgot-password-form"}
+      method="post"
+      className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] text-gray-500 rounded-lg shadow-xl border border-gray-200 bg-white"
+    >
       <p className="text-2xl font-medium m-auto">
         <span className="text-emerald-600">User</span> {state === "login" ? "Login" : state === "register" ? "Sign Up" : "Forgot Password"}
       </p>
@@ -105,7 +110,7 @@ const Login = () => {
             autoComplete="name"
             onChange={(e) => setFullName(e.target.value)}
             value={fullName}
-            placeholder="type here"
+            placeholder="John Doe"
             className="border border-gray-200 rounded w-full p-2 mt-1 outline-emerald-500"
             type="text"
             required
@@ -117,10 +122,10 @@ const Login = () => {
         <input
           id="email"
           name="email"
-          autoComplete="email"
+          autoComplete={state === "register" ? "email username" : "username email"}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
-          placeholder="type here"
+          placeholder="user@example.com"
           className="border border-gray-200 rounded w-full p-2 mt-1 outline-emerald-500"
           type="email"
           required
@@ -136,7 +141,7 @@ const Login = () => {
               autoComplete={state === "register" ? "new-password" : "current-password"}
               onChange={(e) => setPassword(e.target.value)} 
               value={password} 
-              placeholder="type here" 
+              placeholder="Enter your password" 
               className="border border-gray-200 rounded w-full p-2 mt-1 pr-10 outline-emerald-500" 
               type={showPassword ? "text" : "password"} 
               required 
