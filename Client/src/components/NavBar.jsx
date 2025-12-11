@@ -50,7 +50,7 @@ const NavBar = () => {
   const faqLink = { label: 'FAQ', sectionId: 'faq'}
 
   return (
-    <header className='sticky top-0 z-50 w-full border-b border-gray-200/30 dark:border-white/10 bg-white/30 dark:bg-white/5 backdrop-blur-lg shadow-lg shadow-emerald-500/20'>
+    <header className='hidden lg:block sticky top-0 z-50 w-full border-b border-gray-200/30 dark:border-white/10 bg-white/30 dark:bg-white/5 backdrop-blur-lg shadow-lg shadow-emerald-500/20'>
       <div className='w-full px-6 py-4 flex items-center justify-between'>
 
         {/* LEFT SIDE — Logo + Nav */}
