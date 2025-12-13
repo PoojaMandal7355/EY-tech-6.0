@@ -153,7 +153,7 @@ API_V1_PREFIX=/api/v1
 CORS_ORIGINS=http://localhost:5173
 FRONTEND_URL=http://localhost:5173
 
-# Optional: Email service for password reset
+**Email service for password reset**
 GMAIL_EMAIL=your-email@gmail.com
 GMAIL_APP_PASSWORD=your-app-password
 \\\
