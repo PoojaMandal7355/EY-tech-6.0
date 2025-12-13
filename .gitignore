@@ -1,4 +1,7 @@
 .env
+*.env
+agentic-pharma-ai/.env
+Client/.env
 .venv
 venv
 
@@ -12,6 +15,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+Client/node_modules/
 dist
 dist-ssr
 *.local
