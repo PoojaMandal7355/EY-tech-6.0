@@ -18,6 +18,8 @@ node_modules
 Client/node_modules/
 dist
 dist-ssr
+Client/dist/
+Client/.vite/
 *.local
 .env
 
@@ -56,6 +58,9 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+/.pytest_cache/
+.coverage
+coverage.xml
 
 # Environment
 .env
@@ -71,10 +76,17 @@ wheels/
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Database
 *.db
 *.sqlite3
+
+# Local runtime configs
+Server/.env
+Server/.env.*
+agentic-pharma-ai/.env.*
+Client/.env.*
 
 # Logs
 *.log
